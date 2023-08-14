@@ -1,0 +1,4 @@
+/gravitee/*/logs/**
+.env
+/gravitee/elasticsearch/data/**
+/gravitee/mongodb/data/**
