@@ -125,3 +125,42 @@ services:
       - ./gravitee/apim-portal-ui/logs:/var/log/nginx
     networks:
       - frontend
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
+    command: start-dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    container_name: local_keycloak
+    environment:
+     - KC_DB=${KC_DB}
+     - KC_DB_URL_HOST=${KC_DB_URL_HOST}
+     - KC_DB_URL_DATABASE=${KC_DB_URL_DATABASE}
+     - KC_DB_USERNAME=${KC_DB_USERNAME}
+     - KC_DB_PASSWORD=${KC_DB_PASSWORD}
+     - KC_DB_SCHEMA=${KC_DB_SCHEMA}
+     - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+     - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+    ports:
+      - "8890:8080"
+    restart: unless-stopped
+    networks:
+      - storage
+      - frontend
+
+  postgres:
+    image: postgres:${POSTGRESQL_VERSION}
+    volumes:
+      - ./keycloak/postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
+    healthcheck:
+      test: "exit 0"
+    ports:
+      - "5456:5432"
+    networks:
+      - storage
+
