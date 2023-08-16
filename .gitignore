@@ -2,3 +2,4 @@
 .env
 /gravitee/elasticsearch/data/**
 /gravitee/mongodb/data/**
+/elasticsearch-data/**

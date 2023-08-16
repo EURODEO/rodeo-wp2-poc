@@ -20,6 +20,8 @@ networks:
     name: frontend
   storage:
     name: storage
+  catalog:
+    name: catalog
 
 services:
   mongodb:
@@ -31,7 +33,7 @@ services:
     networks:
       - storage
 
-  elasticsearch:
+  elasticsearch-apim:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-8.8.1}
     container_name: gio_apim_elasticsearch
     restart: always
@@ -61,14 +63,14 @@ services:
       - "8082:8082"
     depends_on:
       - mongodb
-      - elasticsearch
+      - elasticsearch-apim
     volumes:
       - ./gravitee/apim-gateway/logs:/opt/graviteeio-gateway/logs
       - ./gravitee/apim-gateway/plugins:/opt/graviteeio-gateway/plugins-ext
     environment:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_ratelimit_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
-      - gravitee_reporters_elasticsearch_endpoints_0=http://elasticsearch:9200
+      - gravitee_reporters_elasticsearch_endpoints_0=http://elasticsearch-apim:9200
       - gravitee_plugins_path_0=/opt/graviteeio-gateway/plugins
       - gravitee_plugins_path_1=/opt/graviteeio-gateway/plugins-ext
     networks:
@@ -83,13 +85,13 @@ services:
       - "8083:8083"
     depends_on:
       - mongodb
-      - elasticsearch
+      - elasticsearch-apim
     volumes:
       - ./gravitee/apim-management-api/logs:/opt/graviteeio-management-api/logs
       - ./gravitee/apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext
     environment:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
-      - gravitee_analytics_elasticsearch_endpoints_0=http://elasticsearch:9200
+      - gravitee_analytics_elasticsearch_endpoints_0=http://elasticsearch-apim:9200
       - gravitee_plugins_path_0=/opt/graviteeio-management-api/plugins
       - gravitee_plugins_path_1=/opt/graviteeio-management-api/plugins-ext
     networks:
@@ -125,3 +127,28 @@ services:
       - ./gravitee/apim-portal-ui/logs:/var/log/nginx
     networks:
       - frontend
+
+  elasticsearch:
+    image: elasticsearch:8.8.0
+    container_name: elasticsearch
+    restart: always
+    volumes:
+      - ./elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    networks:
+      - catalog
+
+  catalog:
+    build:
+      context: ./catalog
+    command: tail -F anything
+    container_name: catalog
+    volumes:
+      - "./metadata-files:/metadata-files"
+    networks:
+      - catalog

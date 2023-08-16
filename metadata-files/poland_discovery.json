@@ -1,0 +1,156 @@
+{
+  "id": "urn:x-wmo:md:pol.poland:surface-weather-observations",
+  "conformsTo": ["http://wis.wmo.int/spec/wcmp/2.0"],
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [14.17, 48.97],
+        [14.17, 55.04],
+        [24.63, 55.04],
+        [24.63, 48.97],
+        [14.17, 48.97]
+      ]
+    ]
+  },
+  "properties": {
+    "identifier": "urn:x-wmo:md:pol.poland:surface-weather-observations",
+    "title": "Surface weather observations from pol.poland",
+    "description": "Surface weather observations from pol.poland",
+    "themes": [
+      {
+        "concepts": [
+          {
+            "id": "surface weather"
+          },
+          {
+            "id": "temperature"
+          },
+          {
+            "id": "observations"
+          }
+        ]
+      },
+      {
+        "concepts": [
+          {
+            "id": "weatherObservations"
+          },
+          {
+            "id": "synopticMeteorology"
+          }
+        ],
+        "scheme": "https://github.com/wmo-im/wcmp-codelists/blob/main/codelists/WMO_CategoryCode.csv"
+      }
+    ],
+    "language": "en",
+    "type": "dataset",
+    "created": "2023-04-20T13:16:10Z",
+    "updated": "2023-04-13",
+    "rights": null,
+    "providers": [
+      {
+        "name": "IMGW - PIB",
+        "positionName": "WIS2 administrators",
+        "contactInfo": {
+          "phone": {
+            "office": "+48 22 56 94 101"
+          },
+          "email": {
+            "office": "wis@imgw.pl"
+          },
+          "address": {
+            "office": {
+              "deliveryPoint": "Podlesna 61",
+              "city": "Warsaw",
+              "administrativeArea": "Mazowieckie",
+              "postalCode": "01-673",
+              "country": "Poland"
+            }
+          },
+          "hoursOfService": "0800h - 1600h CEST/CET",
+          "contactInstructions": "wis@imgw.pl",
+          "url": {
+            "rel": "canonical",
+            "type": "text/html",
+            "href": "https://imgw.pl"
+          }
+        },
+        "roles": [
+          {
+            "name": "pointOfContact"
+          },
+          {
+            "name": "distributor"
+          }
+        ]
+      }
+    ],
+    "wmo:topicHierarchy": "pol/poland/data/core/weather/surface-based-observations/synop",
+    "wmo:dataPolicy": "core",
+    "_metadata-anytext": "Surface weather observations from pol.poland Surface weather observations from pol.poland surface weather temperature observations weatherObservations synopticMeteorology",
+    "id": "urn:x-wmo:md:pol.poland:surface-weather-observations"
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "https://wis2-pilot.imgw.pl/oapi/collections/urn:x-wmo:md:pol.poland:surface-weather-observations",
+      "type": "OAFeat",
+      "title": "urn:x-wmo:md:pol.poland:surface-weather-observations"
+    },
+    {
+      "rel": "data",
+      "href": "mqtt://everyone:everyone@mosquitto:1883",
+      "type": "MQTT",
+      "title": "pol.poland.data.core.weather.surface-based-observations.synop",
+      "channel": "origin/a/wis2/pol/poland/data/core/weather/surface-based-observations/synop"
+    },
+    {
+      "rel": "canonical",
+      "href": "https://wis2-pilot.imgw.pl/oapi/collections/discovery-metadata/items/urn:x-wmo:md:pol.poland:surface-weather-observations",
+      "type": "OARec",
+      "title": "urn:x-wmo:md:pol.poland:surface-weather-observations"
+    },
+    {
+      "type": "application/json",
+      "rel": "root",
+      "title": "The landing page of this server as JSON",
+      "href": "https://wis2-pilot.imgw.pl/oapi?f=json"
+    },
+    {
+      "type": "text/html",
+      "rel": "root",
+      "title": "The landing page of this server as HTML",
+      "href": "https://wis2-pilot.imgw.pl/oapi?f=html"
+    },
+    {
+      "rel": "self",
+      "type": "application/geo+json",
+      "title": "This document as GeoJSON",
+      "href": "https://wis2-pilot.imgw.pl/oapi/collections/discovery-metadata/items/urn:x-wmo:md:pol.poland:surface-weather-observations?f=json"
+    },
+    {
+      "rel": "alternate",
+      "type": "application/ld+json",
+      "title": "This document as RDF (JSON-LD)",
+      "href": "https://wis2-pilot.imgw.pl/oapi/collections/discovery-metadata/items/urn:x-wmo:md:pol.poland:surface-weather-observations?f=jsonld"
+    },
+    {
+      "rel": "alternate",
+      "type": "text/html",
+      "title": "This document as HTML",
+      "href": "https://wis2-pilot.imgw.pl/oapi/collections/discovery-metadata/items/urn:x-wmo:md:pol.poland:surface-weather-observations?f=html"
+    },
+    {
+      "rel": "collection",
+      "type": "application/json",
+      "title": "Discovery metadata",
+      "href": "https://wis2-pilot.imgw.pl/oapi/collections/discovery-metadata"
+    }
+  ],
+  "time": {
+    "interval": ["2023-04-13", null],
+    "resolution": "P1H"
+  }
+}
