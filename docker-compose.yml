@@ -145,7 +145,7 @@ services:
 
   catalog:
     build:
-      context: ./catalog
+      context: ./rodeo-poc-wis2-gdc
     command: tail -F anything
     container_name: catalog
     volumes:
