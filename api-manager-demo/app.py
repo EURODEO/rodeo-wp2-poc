@@ -1,22 +1,13 @@
 from flask import Flask, request, abort, make_response
+from elasticsearch import Elasticsearch, exceptions
 import urllib
 import json
 
-urldictionary = {
-    "id": urllib.parse.urlparse("https://wis2-pilot.imgw.pl/oapi/collections/urn:x-wmo:md:pol.poland:surface-weather-observations?f=json")
-}
-
-iddictionary = dict()
-
-for id in urldictionary:
-    url = urldictionary[id]
-    print(url)
-    parsed = url.scheme + '://' + url.netloc + url.path
-    iddictionary.update({parsed:id})
-
-print(iddictionary)
-
 BASE_URL = 'http://localhost:5000'
+ELASTICSEARCH_URL = 'http://localhost:9200'
+DEFAULT_QUERY_PARAMETERS = {'f': 'json'}
+
+client = Elasticsearch(ELASTICSEARCH_URL)
 
 app = Flask(__name__)
 
@@ -38,47 +29,50 @@ def typeIsValid(obj):
             return True
     return False
 
-def mapLink(str):
-    print(str)
-    if str in iddictionary:
-        return BASE_URL + '/' + iddictionary[str]
-    splitted = str.rpartition("/")
-    if len(splitted[0]) == 0:
-        return str
-    return mapLink(splitted[0]) + '/' + splitted[2]
-    
-def mapLinks(obj):
-    href = obj['href'].partition('?')
-    obj['href'] = mapLink(href[0]) + '?' + href[2]
+def mapLinkObj(obj, hits):
+    possibleHits = list(filter(lambda hit: obj['href'].startswith(hit['_source']['href']) ,hits))
+    if len(possibleHits) == 0:
+        return obj
+    possibleHits.sort(key=lambda hit: -len(hit['_source']['href']))
+    obj['href'] = obj['href'].replace(possibleHits[0]['_source']['href'], BASE_URL + '/' + possibleHits[0]['_id'])
     return obj
+    
+def mapLinks(items, id):
+    metadataHits = client.search(index="metadata_collection", query={"match":{"original_metadata_id":id}})['hits']['hits']
+    return list(map(lambda x: mapLinkObj(x, metadataHits), items))
 
 def getRealLink(id):
-    if id not in urldictionary:
-        return None
-    return urldictionary[id]
+    try:
+        # TODO: add check if platform is correct
+        result = client.get(index="metadata_collection", id=id)
+        return (result["_source"]['href'], result["_source"]["original_metadata_id"])
+    except exceptions.NotFoundError:
+        return (None, None)
+    
+def addQueryDictToQueryString (mutable, toBeAdded):
+    for key in toBeAdded:
+        mutable[key] = toBeAdded[key]
 
 def getData(id, path, queryargs):
-    url = getRealLink(id)
+    url, metadataId = getRealLink(id)
     if url == None:
         abort(404)
 
-    querystring = urllib.parse.parse_qs(url.query).copy()
-    querystringToAdd = queryargs.copy()
-    for key in querystringToAdd:
-        querystring[key] = querystringToAdd[key]
+    url = urllib.parse.urlparse(url)
+
+    querystring = DEFAULT_QUERY_PARAMETERS.copy()
+    addQueryDictToQueryString(querystring, urllib.parse.parse_qs(url.query))
+    addQueryDictToQueryString(querystring, queryargs)
     
     url = url._replace(query = urllib.parse.urlencode(querystring, doseq=True))
     if len(path) > 0:
         url = url._replace(path = url.path + '/' + path)
     
-    print(urllib.parse.urlunparse(url))
-    print(url)
-    
     req = urllib.request.urlopen(urllib.parse.urlunparse(url))
     data = json.loads((req).read())
     
     if 'links' in data:
-        data['links'] = list(map(mapLinks, filter(typeIsValid, data['links'])))
+        data['links'] = mapLinks(filter(typeIsValid, data['links']), metadataId)
     
     resp = make_response(json.dumps(data))
     resp.content_type = req.getheader('Content-Type')
@@ -87,5 +81,4 @@ def getData(id, path, queryargs):
 
 if __name__ == '__main__':
     app.debug = True
-    print("Hello, World!")
     app.run(host='0.0.0.0', port=5000)
