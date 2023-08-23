@@ -87,11 +87,14 @@ services:
     volumes:
       - ./gravitee/apim-management-api/logs:/opt/graviteeio-management-api/logs
       - ./gravitee/apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext
+      - ./conf/ssl/truststore.jks:/opt/graviteeio-management-api/security/truststore.jks:ro
     environment:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
+      - gravitee_ratelimit_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_analytics_elasticsearch_endpoints_0=http://elasticsearch:9200
       - gravitee_plugins_path_0=/opt/graviteeio-management-api/plugins
       - gravitee_plugins_path_1=/opt/graviteeio-management-api/plugins-ext
+      - JAVA_OPTS=-Djavax.net.ssl.trustStore=/opt/graviteeio-management-api/security/truststore.jks -Djavax.net.ssl.trustStorePassword=admin
     networks:
       - storage
       - frontend
@@ -142,6 +145,8 @@ services:
      - KC_DB_SCHEMA=${KC_DB_SCHEMA}
      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+     - KC_LOG=file
+     - KC_LOG_LEVEL=DEBUG
     ports:
       - "8890:8080"
     restart: unless-stopped
