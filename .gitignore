@@ -3,3 +3,4 @@
 /gravitee/elasticsearch/data/**
 /gravitee/mongodb/data/**
 /keycloak/postgres-data/**
+/conf/
