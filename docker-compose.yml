@@ -142,6 +142,7 @@ services:
       - xpack.security.enabled=false
     networks:
       - catalog
+      - storage
 
   catalog:
     build:
