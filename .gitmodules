@@ -1,0 +1,3 @@
+[submodule "rodeo-poc-wis2-gdc"]
+	path = rodeo-poc-wis2-gdc
+	url = git@github.com:EURODEO/rodeo-poc-wis2-gdc.git
