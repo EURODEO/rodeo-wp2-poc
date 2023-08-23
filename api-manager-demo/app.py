@@ -2,9 +2,10 @@ from flask import Flask, request, abort, make_response
 from elasticsearch import Elasticsearch, exceptions
 import urllib
 import json
+import os
 
-BASE_URL = 'http://localhost:5000'
-ELASTICSEARCH_URL = 'http://localhost:9200'
+BASE_URL = os.environ["BASE_URL"]
+ELASTICSEARCH_URL = 'http://elasticsearch:9200'
 DEFAULT_QUERY_PARAMETERS = {'f': 'json'}
 
 client = Elasticsearch(ELASTICSEARCH_URL)
@@ -77,8 +78,3 @@ def getData(id, path, queryargs):
     resp = make_response(json.dumps(data))
     resp.content_type = req.getheader('Content-Type')
     return resp
-
-
-if __name__ == '__main__':
-    app.debug = True
-    app.run(host='0.0.0.0', port=5000)

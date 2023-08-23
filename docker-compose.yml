@@ -153,3 +153,16 @@ services:
       - "./metadata-files:/metadata-files"
     networks:
       - catalog
+
+  apimanager:
+    build:
+      context: ./api-manager-demo
+    container_name: apimanager
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5000:5000"
+    environment:
+      - BASE_URL=http://localhost:5000
+    networks:
+      - storage
