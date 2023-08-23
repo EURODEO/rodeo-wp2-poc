@@ -128,7 +128,6 @@ services:
     networks:
       - frontend
 
-<<<<<<< HEAD
   keycloak:
     image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
     command: start-dev
@@ -137,14 +136,14 @@ services:
         condition: service_healthy
     container_name: local_keycloak
     environment:
-     - KC_DB=${KC_DB}
-     - KC_DB_URL_HOST=${KC_DB_URL_HOST}
-     - KC_DB_URL_DATABASE=${KC_DB_URL_DATABASE}
-     - KC_DB_USERNAME=${KC_DB_USERNAME}
-     - KC_DB_PASSWORD=${KC_DB_PASSWORD}
-     - KC_DB_SCHEMA=${KC_DB_SCHEMA}
-     - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-     - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_DB=${KC_DB}
+      - KC_DB_URL_HOST=${KC_DB_URL_HOST}
+      - KC_DB_URL_DATABASE=${KC_DB_URL_DATABASE}
+      - KC_DB_USERNAME=${KC_DB_USERNAME}
+      - KC_DB_PASSWORD=${KC_DB_PASSWORD}
+      - KC_DB_SCHEMA=${KC_DB_SCHEMA}
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
     ports:
       - "8890:8080"
     restart: unless-stopped
@@ -167,7 +166,6 @@ services:
     networks:
       - storage
 
-=======
   elasticsearch:
     image: elasticsearch:8.8.0
     container_name: elasticsearch
@@ -206,4 +204,18 @@ services:
       - BASE_URL=http://localhost:5000
     networks:
       - storage
->>>>>>> d2a1ed1938565537438d79353d31ed971ba21bf5
+
+  catalog_ui:
+    build:
+      context: ./catalog-ui
+      dockerfile: dev.Dockerfile
+    container_name: catalog_ui
+    depends_on:
+      - elasticsearch
+    ports:
+      - "3000:3000"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    volumes:
+      - ./catalog-ui:/app
+      - /app/node_modules
