@@ -1,0 +1,8 @@
+== Components
+
+=== EWC
+
+image::images/RODEO-FEMDI-Solution-architecture-prototype-EWC.drawio.png[EWC architecture diagram]
+
+=== AWS
+image::images/RODEO-FEMDI-Solution-architecture-prototype-AWS.drawio.png[AWS architecture diagram]
