@@ -1,0 +1,120 @@
+{
+  "name" : "API Manager",
+  "crossId" : "ab486a43-bd0a-4c5c-886a-43bd0aac5cea",
+  "version" : "1.0.0",
+  "execution_mode" : "v3",
+  "description" : "Public api manager",
+  "visibility" : "PRIVATE",
+  "flows" : [ ],
+  "gravitee" : "2.0.0",
+  "flow_mode" : "DEFAULT",
+  "resources" : [ ],
+  "properties" : [ ],
+  "members" : [ {
+    "source" : "memory",
+    "sourceId" : "admin",
+    "roles" : [ "0cb3dc4d-bb57-4a02-b3dc-4dbb575a026f" ]
+  } ],
+  "pages" : [ {
+    "id" : "6c6c7e20-41c1-4b6e-ac7e-2041c19b6ea7",
+    "crossId" : "0d938106-d50c-4084-9381-06d50cb0845b",
+    "name" : "Aside",
+    "type" : "SYSTEM_FOLDER",
+    "order" : 0,
+    "published" : true,
+    "visibility" : "PUBLIC",
+    "lastModificationDate" : 1693308574031,
+    "contentType" : "application/json",
+    "homepage" : false,
+    "parentPath" : "",
+    "excludedAccessControls" : false,
+    "accessControls" : [ ],
+    "api" : "41ce7886-c2c8-49d3-8e78-86c2c849d3d1",
+    "attached_media" : [ ]
+  } ],
+  "plans" : [ {
+    "id" : "3872087d-40fc-4a8a-b208-7d40fcda8a28",
+    "crossId" : "09017416-dd9b-4045-8174-16dd9bd0456e",
+    "name" : "Api manager public",
+    "description" : "Api manager public plan",
+    "validation" : "AUTO",
+    "security" : "KEY_LESS",
+    "type" : "API",
+    "status" : "PUBLISHED",
+    "api" : "41ce7886-c2c8-49d3-8e78-86c2c849d3d1",
+    "order" : 0,
+    "characteristics" : [ ],
+    "created_at" : 1693308556559,
+    "updated_at" : 1693308574015,
+    "published_at" : 1693308556559,
+    "paths" : { },
+    "flows" : [ {
+      "id" : "dfcf1b99-ee23-4666-8f1b-99ee237666e7",
+      "name" : "",
+      "path-operator" : {
+        "path" : "/",
+        "operator" : "STARTS_WITH"
+      },
+      "condition" : "",
+      "consumers" : [ ],
+      "methods" : [ ],
+      "pre" : [ {
+        "name" : "Resource Filtering",
+        "description" : "",
+        "enabled" : true,
+        "policy" : "resource-filtering",
+        "configuration" : {"whitelist":[{"methods":["GET"],"pattern":"/**"}]}
+      } ],
+      "post" : [ ],
+      "enabled" : true
+    } ],
+    "comment_required" : false
+  } ],
+  "metadata" : [ {
+    "key" : "email-support",
+    "name" : "email-support",
+    "format" : "MAIL",
+    "value" : "${(api.primaryOwner.email)!''}",
+    "defaultValue" : "support@change.me",
+    "apiId" : "41ce7886-c2c8-49d3-8e78-86c2c849d3d1"
+  } ],
+  "id" : "41ce7886-c2c8-49d3-8e78-86c2c849d3d1",
+  "path_mappings" : [ ],
+  "proxy" : {
+    "virtual_hosts" : [ {
+      "path" : "/api-manager/"
+    } ],
+    "strip_context_path" : false,
+    "preserve_host" : false,
+    "groups" : [ {
+      "name" : "default-group",
+      "endpoints" : [ {
+        "backup" : false,
+        "inherit" : true,
+        "name" : "default",
+        "weight" : 1,
+        "type" : "http",
+        "target" : "http://apimanager:5000"
+      } ],
+      "load_balancing" : {
+        "type" : "ROUND_ROBIN"
+      },
+      "http" : {
+        "connectTimeout" : 5000,
+        "idleTimeout" : 60000,
+        "keepAlive" : true,
+        "readTimeout" : 10000,
+        "pipelining" : false,
+        "maxConcurrentConnections" : 100,
+        "useCompression" : true,
+        "followRedirects" : false
+      }
+    } ]
+  },
+  "response_templates" : { },
+  "primaryOwner" : {
+    "id" : "20f413d4-a803-40e4-b413-d4a80350e4ca",
+    "displayName" : "admin",
+    "type" : "USER"
+  }
+}

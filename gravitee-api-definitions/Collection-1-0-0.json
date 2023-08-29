@@ -1,0 +1,123 @@
+{
+  "name" : "Collection",
+  "crossId" : "5f1568a8-0178-4c78-9568-a801783c7865",
+  "version" : "1.0.0",
+  "execution_mode" : "v3",
+  "description" : "Collection API",
+  "visibility" : "PRIVATE",
+  "flows" : [ ],
+  "gravitee" : "2.0.0",
+  "flow_mode" : "DEFAULT",
+  "resources" : [ ],
+  "properties" : [ ],
+  "members" : [ {
+    "source" : "memory",
+    "sourceId" : "admin",
+    "roles" : [ "0cb3dc4d-bb57-4a02-b3dc-4dbb575a026f" ]
+  } ],
+  "pages" : [ {
+    "id" : "705eac37-1e40-4971-9eac-371e401971d6",
+    "crossId" : "7c9e96f7-3eff-489a-9e96-f73eff389a23",
+    "name" : "Aside",
+    "type" : "SYSTEM_FOLDER",
+    "order" : 0,
+    "published" : true,
+    "visibility" : "PUBLIC",
+    "lastModificationDate" : 1693306649134,
+    "contentType" : "application/json",
+    "homepage" : false,
+    "parentPath" : "",
+    "excludedAccessControls" : false,
+    "accessControls" : [ ],
+    "api" : "794610aa-5898-4aec-8610-aa58985aecf1",
+    "attached_media" : [ ]
+  } ],
+  "plans" : [ {
+    "id" : "0be95506-c321-4c00-a955-06c3216c00ee",
+    "crossId" : "fa3380f8-0888-40e2-b380-f8088800e2b0",
+    "name" : "Collection",
+    "description" : "metadata_collection",
+    "validation" : "MANUAL",
+    "security" : "API_KEY",
+    "type" : "API",
+    "status" : "PUBLISHED",
+    "api" : "794610aa-5898-4aec-8610-aa58985aecf1",
+    "order" : 0,
+    "characteristics" : [ ],
+    "created_at" : 1693304619725,
+    "updated_at" : 1693306649124,
+    "published_at" : 1693304619728,
+    "paths" : { },
+    "flows" : [ {
+      "id" : "19427cad-3df4-44d2-827c-ad3df464d274",
+      "name" : "",
+      "path-operator" : {
+        "path" : "/",
+        "operator" : "STARTS_WITH"
+      },
+      "condition" : "",
+      "consumers" : [ ],
+      "methods" : [ ],
+      "pre" : [ {
+        "name" : "Resource Filtering",
+        "description" : "",
+        "enabled" : true,
+        "policy" : "resource-filtering",
+        "configuration" : {"whitelist":[{"methods":["GET"],"pattern":"/**"}]}
+      } ],
+      "post" : [ ],
+      "enabled" : true
+    } ],
+    "comment_required" : false
+  } ],
+  "metadata" : [ {
+    "key" : "email-support",
+    "name" : "email-support",
+    "format" : "MAIL",
+    "value" : "${(api.primaryOwner.email)!''}",
+    "defaultValue" : "support@change.me",
+    "apiId" : "794610aa-5898-4aec-8610-aa58985aecf1"
+  } ],
+  "id" : "794610aa-5898-4aec-8610-aa58985aecf1",
+  "path_mappings" : [ ],
+  "proxy" : {
+    "virtual_hosts" : [ {
+      "path" : "/metadata_collection/"
+    } ],
+    "strip_context_path" : false,
+    "preserve_host" : false,
+    "groups" : [ {
+      "name" : "default-group",
+      "endpoints" : [ {
+        "healthcheck" : {
+          "enabled" : false
+        },
+        "backup" : false,
+        "inherit" : true,
+        "name" : "default",
+        "weight" : 1,
+        "type" : "http",
+        "target" : "http://elasticsearch:9200/metadata_collection"
+      } ],
+      "load_balancing" : {
+        "type" : "ROUND_ROBIN"
+      },
+      "http" : {
+        "connectTimeout" : 5000,
+        "idleTimeout" : 60000,
+        "keepAlive" : true,
+        "readTimeout" : 10000,
+        "pipelining" : false,
+        "maxConcurrentConnections" : 100,
+        "useCompression" : true,
+        "followRedirects" : false
+      }
+    } ]
+  },
+  "response_templates" : { },
+  "primaryOwner" : {
+    "id" : "20f413d4-a803-40e4-b413-d4a80350e4ca",
+    "displayName" : "admin",
+    "type" : "USER"
+  }
+}

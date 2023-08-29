@@ -1,0 +1,120 @@
+{
+  "name" : "Discovery Metadata",
+  "crossId" : "31541e83-4c43-4b81-941e-834c437b8106",
+  "version" : "1.0.0",
+  "execution_mode" : "v3",
+  "description" : "wis2 discovery metadata",
+  "visibility" : "PRIVATE",
+  "flows" : [ ],
+  "gravitee" : "2.0.0",
+  "flow_mode" : "DEFAULT",
+  "resources" : [ ],
+  "properties" : [ ],
+  "members" : [ {
+    "source" : "memory",
+    "sourceId" : "admin",
+    "roles" : [ "0cb3dc4d-bb57-4a02-b3dc-4dbb575a026f" ]
+  } ],
+  "pages" : [ {
+    "id" : "2d1ed08f-e7f8-4a71-9ed0-8fe7f86a715d",
+    "crossId" : "e5428361-b769-46b6-8283-61b76976b625",
+    "name" : "Aside",
+    "type" : "SYSTEM_FOLDER",
+    "order" : 0,
+    "published" : true,
+    "visibility" : "PUBLIC",
+    "lastModificationDate" : 1693307285931,
+    "contentType" : "application/json",
+    "homepage" : false,
+    "parentPath" : "",
+    "excludedAccessControls" : false,
+    "accessControls" : [ ],
+    "api" : "f366bc4a-0089-48da-a6bc-4a008918da2f",
+    "attached_media" : [ ]
+  } ],
+  "plans" : [ {
+    "id" : "43085c21-ca9d-48e3-885c-21ca9d78e370",
+    "crossId" : "caa30c14-d039-49b0-a30c-14d03929b0b8",
+    "name" : "Discovery Allow Get",
+    "description" : "Discovery Allow GET",
+    "validation" : "AUTO",
+    "security" : "KEY_LESS",
+    "type" : "API",
+    "status" : "PUBLISHED",
+    "api" : "f366bc4a-0089-48da-a6bc-4a008918da2f",
+    "order" : 0,
+    "characteristics" : [ ],
+    "created_at" : 1693306866180,
+    "updated_at" : 1693307285922,
+    "published_at" : 1693306866180,
+    "paths" : { },
+    "flows" : [ {
+      "id" : "b9175dbc-ffb0-4f73-975d-bcffb03f73b2",
+      "name" : "",
+      "path-operator" : {
+        "path" : "/",
+        "operator" : "STARTS_WITH"
+      },
+      "condition" : "",
+      "consumers" : [ ],
+      "methods" : [ ],
+      "pre" : [ {
+        "name" : "Resource Filtering",
+        "description" : "",
+        "enabled" : true,
+        "policy" : "resource-filtering",
+        "configuration" : {"whitelist":[{"methods":["GET"],"pattern":"/**"}]}
+      } ],
+      "post" : [ ],
+      "enabled" : true
+    } ],
+    "comment_required" : false
+  } ],
+  "metadata" : [ {
+    "key" : "email-support",
+    "name" : "email-support",
+    "format" : "MAIL",
+    "value" : "${(api.primaryOwner.email)!''}",
+    "defaultValue" : "support@change.me",
+    "apiId" : "f366bc4a-0089-48da-a6bc-4a008918da2f"
+  } ],
+  "id" : "f366bc4a-0089-48da-a6bc-4a008918da2f",
+  "path_mappings" : [ ],
+  "proxy" : {
+    "virtual_hosts" : [ {
+      "path" : "/wis2-discovery-metadata/"
+    } ],
+    "strip_context_path" : false,
+    "preserve_host" : false,
+    "groups" : [ {
+      "name" : "default-group",
+      "endpoints" : [ {
+        "backup" : false,
+        "inherit" : true,
+        "name" : "default",
+        "weight" : 1,
+        "type" : "http",
+        "target" : "http://elasticsearch:9200/wis2-discovery-metadata"
+      } ],
+      "load_balancing" : {
+        "type" : "ROUND_ROBIN"
+      },
+      "http" : {
+        "connectTimeout" : 5000,
+        "idleTimeout" : 60000,
+        "keepAlive" : true,
+        "readTimeout" : 10000,
+        "pipelining" : false,
+        "maxConcurrentConnections" : 100,
+        "useCompression" : true,
+        "followRedirects" : false
+      }
+    } ]
+  },
+  "response_templates" : { },
+  "primaryOwner" : {
+    "id" : "20f413d4-a803-40e4-b413-d4a80350e4ca",
+    "displayName" : "admin",
+    "type" : "USER"
+  }
+}
