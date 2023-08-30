@@ -1,9 +1,15 @@
 import { DiscoveryMetadata, ElasticsearchRecord } from "@/app/types";
 import { Client } from "@elastic/elasticsearch";
 import { GetResponse } from "@elastic/elasticsearch/lib/api/types";
+import dynamic from "next/dynamic";
 
 const client = new Client({
   node: process.env.ELASTICSEARCH_URL,
+});
+
+const Map = dynamic(() => import("./Map"), {
+  loading: () => <p>Loading...</p>,
+  ssr: false,
 });
 
 type ContentMap<T> = {
@@ -55,7 +61,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       custom: (val) => (
         <div className="divide-y divide-zinc-500">
           {val.map((el: { concepts: { id: string }[]; scheme?: string }) => (
-            <div className="p-1">
+            <div className="p-1" key={el.concepts.map((e) => e.id).join("-")}>
               <div>
                 Concepts:{" "}
                 {el.concepts.map((e: { id: string }) => e.id).join(", ")}
@@ -78,7 +84,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               type: any;
               rel: any;
             }) => (
-              <div className="p-1">
+              <div className="p-1" key={el.href}>
                 <a
                   href={el.href}
                   className="underline hover:text-zinc-700 dark:hover:text-zinc-300"
@@ -104,6 +110,9 @@ export default async function Page({ params }: { params: { id: string } }) {
       <table className="w-full">
         <tbody className="divide-y divide-zinc-500">{content}</tbody>
       </table>
+      {document._source?.geometry && (
+        <Map geometry={document._source.geometry} />
+      )}
     </div>
   );
 }

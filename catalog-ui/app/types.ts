@@ -7,7 +7,7 @@ export type ElasticsearchRecord<T> = {
 
 export type Geometry = {
   type: "Polygon";
-  cordinates: [number, number][][];
+  coordinates: [number, number][][];
 };
 
 export type BasicLink = {
