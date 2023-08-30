@@ -5,7 +5,7 @@ import json
 import os
 
 BASE_URL = os.environ["BASE_URL"]
-ELASTICSEARCH_URL = 'http://elasticsearch:9200'
+ELASTICSEARCH_URL = os.environ["ELASTICSEARCH_URL"]
 DEFAULT_QUERY_PARAMETERS = {'f': 'json'}
 
 client = Elasticsearch(ELASTICSEARCH_URL)

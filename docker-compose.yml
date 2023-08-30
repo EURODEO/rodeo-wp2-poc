@@ -189,6 +189,13 @@ services:
     container_name: catalog
     volumes:
       - "./metadata-files:/metadata-files"
+    environment:
+      - WIS2_GDC_API_URL=http://localhost:5000
+      - WIS2_GDC_BACKEND=Elasticsearch
+      - WIS2_GDC_CONNECTION=http://elasticsearch:9200/wis2-discovery-metadata
+      - WIS2_GDC_COLLECTION_INDEX=metadata_collection
+      - EWC_URL=http://localhost:8082/api-manager
+      - AWS_URL=http://example.org
     networks:
       - catalog
 
@@ -201,7 +208,8 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - BASE_URL=http://localhost:5000
+      - BASE_URL=http://localhost:8082/api-manager
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     networks:
       - storage
 
