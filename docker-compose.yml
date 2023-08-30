@@ -16,6 +16,8 @@
 version: "3.5"
 
 networks:
+  nginx:
+    name: nginx
   frontend:
     name: frontend
   storage:
@@ -76,6 +78,7 @@ services:
     networks:
       - storage
       - frontend
+      - nginx
 
   management_api:
     image: graviteeio/apim-management-api:${APIM_VERSION:-4}
@@ -97,6 +100,7 @@ services:
     networks:
       - storage
       - frontend
+      - nginx
 
   management_ui:
     image: graviteeio/apim-management-ui:${APIM_VERSION:-4}
@@ -112,6 +116,7 @@ services:
       - ./gravitee/apim-management-ui/logs:/var/log/nginx
     networks:
       - frontend
+      - nginx
 
   portal_ui:
     image: graviteeio/apim-portal-ui:${APIM_VERSION:-4}
@@ -127,6 +132,7 @@ services:
       - ./gravitee/apim-portal-ui/logs:/var/log/nginx
     networks:
       - frontend
+      - nginx
 
   keycloak:
     image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
@@ -227,3 +233,14 @@ services:
     volumes:
       - ./catalog-ui:/app
       - /app/node_modules
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx_container
+    depends_on:
+      - management_ui
+    ports:
+      - 80:80
+    networks:
+        - nginx
