@@ -224,6 +224,8 @@ services:
       - "3000:3000"
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - catalog
     volumes:
       - ./catalog-ui:/app
       - /app/node_modules
