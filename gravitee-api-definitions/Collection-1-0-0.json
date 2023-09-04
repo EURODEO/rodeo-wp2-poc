@@ -32,44 +32,6 @@
     "api" : "794610aa-5898-4aec-8610-aa58985aecf1",
     "attached_media" : [ ]
   } ],
-  "plans" : [ {
-    "id" : "0be95506-c321-4c00-a955-06c3216c00ee",
-    "crossId" : "fa3380f8-0888-40e2-b380-f8088800e2b0",
-    "name" : "Collection",
-    "description" : "metadata_collection",
-    "validation" : "MANUAL",
-    "security" : "API_KEY",
-    "type" : "API",
-    "status" : "PUBLISHED",
-    "api" : "794610aa-5898-4aec-8610-aa58985aecf1",
-    "order" : 0,
-    "characteristics" : [ ],
-    "created_at" : 1693304619725,
-    "updated_at" : 1693306649124,
-    "published_at" : 1693304619728,
-    "paths" : { },
-    "flows" : [ {
-      "id" : "19427cad-3df4-44d2-827c-ad3df464d274",
-      "name" : "",
-      "path-operator" : {
-        "path" : "/",
-        "operator" : "STARTS_WITH"
-      },
-      "condition" : "",
-      "consumers" : [ ],
-      "methods" : [ ],
-      "pre" : [ {
-        "name" : "Resource Filtering",
-        "description" : "",
-        "enabled" : true,
-        "policy" : "resource-filtering",
-        "configuration" : {"whitelist":[{"methods":["GET"],"pattern":"/**"}]}
-      } ],
-      "post" : [ ],
-      "enabled" : true
-    } ],
-    "comment_required" : false
-  } ],
   "metadata" : [ {
     "key" : "email-support",
     "name" : "email-support",
@@ -82,7 +44,7 @@
   "path_mappings" : [ ],
   "proxy" : {
     "virtual_hosts" : [ {
-      "path" : "/metadata_collection/"
+      "path" : "/metadata_collection"
     } ],
     "strip_context_path" : false,
     "preserve_host" : false,

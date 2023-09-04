@@ -6,9 +6,10 @@ import os
 
 BASE_URL = os.environ["BASE_URL"]
 ELASTICSEARCH_URL = os.environ["ELASTICSEARCH_URL"]
+ELASTICSEARCH_TOKEN = os.environ["ELASTICSEARCH_TOKEN"]
 DEFAULT_QUERY_PARAMETERS = {'f': 'json'}
 
-client = Elasticsearch(ELASTICSEARCH_URL)
+client = Elasticsearch(ELASTICSEARCH_URL, bearer_auth=ELASTICSEARCH_TOKEN)
 
 app = Flask(__name__)
 
