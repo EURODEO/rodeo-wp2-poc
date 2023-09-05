@@ -697,7 +697,8 @@
       "secret": "00dc0118-2a0d-4249-86a3-3e133f5de145",
       "redirectUris": [
         "http://localhost:8084/*",
-		"http://localhost/management_ui/*"
+		"http://localhost/management_ui/*",
+		"http://127.0.0.1:8085/*"
       ],
       "webOrigins": [
         "http://localhost:8084"
@@ -1453,7 +1454,26 @@
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
-  "identityProviders": [],
+  "identityProviders": [
+     {
+      "alias": "github",
+      "internalId": "b6003fc7-f068-4bda-8330-57556f3b9437",
+      "providerId": "github",
+      "enabled": true,
+      "updateProfileFirstLoginMode": "on",
+      "trustEmail": false,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "syncMode": "IMPORT",
+        "clientSecret": "**********",
+        "clientId": "4daed3cb29acff70b91c",
+        "useJwksUrl": "true"
+      }
+    }],
   "identityProviderMappers": [],
   "components": {
     "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
