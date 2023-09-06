@@ -18,6 +18,8 @@ version: "3.5"
 networks:
   catalog:
     name: catalog
+  storage:
+    name: storage
 
 services:
   elasticsearch:
@@ -65,6 +67,8 @@ services:
       - BASE_URL=http://localhost:8082/api-manager
       - ELASTICSEARCH_URL=http://gateway:8082
       - ELASTICSEARCH_TOKEN=${ELASTICSEARCH_TOKEN}
+    networks:
+      - storage
 
   catalog_ui:
     build:

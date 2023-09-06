@@ -17,11 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="flex flex-column">
-          <div className="min-h-screen w-screen md:w-160 lg:w-240 xl:w-320">
+      <body className={inter.className + " bg-zinc-100 dark:bg-black"}>
+        <div className="flex justify-center">
+          <div className="min-h-screen w-screen md:w-[768px] lg:w-[1024px] xl:w-[1280px] flex flex-col">
             <Navbar />
-            {children}
+            <div className="grow">{children}</div>
           </div>
         </div>
       </body>
