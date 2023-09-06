@@ -1,7 +1,10 @@
+import Link from "next/link";
+
 export const Navbar = () => {
   return (
-    <div>
-      <h1>Discovery Metadata catalog</h1>
-    </div>
+    <nav>
+      <Link href="/">Discovery Metadata catalog</Link>
+      <Link href="/search">Search</Link>
+    </nav>
   );
 };
