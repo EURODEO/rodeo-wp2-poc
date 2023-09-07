@@ -24,6 +24,8 @@ networks:
     name: storage
   catalog:
     name: catalog
+  ui:
+    name: ui
 
 services:
   mongodb:
@@ -75,10 +77,15 @@ services:
       - gravitee_reporters_elasticsearch_endpoints_0=http://elasticsearch-apim:9200
       - gravitee_plugins_path_0=/opt/graviteeio-gateway/plugins
       - gravitee_plugins_path_1=/opt/graviteeio-gateway/plugins-ext
+      - gravitee_security_providers_0_type=memory
+      - gravitee_security_providers_0_users_0_user_username=admin
+      - gravitee_security_providers_0_users_0_user_password=12345
+      - gravitee_security_providers_0_users_0_user_roles=ORGANIZATION:ADMIN,ENVIRONMENT:ADMIN
     networks:
       - storage
       - frontend
       - nginx
+      - ui
 
   management_api:
     image: graviteeio/apim-management-api:${APIM_VERSION:-4}
@@ -92,11 +99,16 @@ services:
     volumes:
       - ./gravitee/apim-management-api/logs:/opt/graviteeio-management-api/logs
       - ./gravitee/apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext
+      - ./gravitee-config/gravitee.yml:/opt/graviteeio-management-api/config/gravitee.yml
     environment:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_analytics_elasticsearch_endpoints_0=http://elasticsearch-apim:9200
       - gravitee_plugins_path_0=/opt/graviteeio-management-api/plugins
       - gravitee_plugins_path_1=/opt/graviteeio-management-api/plugins-ext
+      - gravitee_security_providers_0_type=memory
+      - gravitee_security_providers_0_users_0_user_username=admin
+      - gravitee_security_providers_0_users_0_user_password=12345
+      - gravitee_security_providers_0_users_0_user_roles=ORGANIZATION:ADMIN,ENVIRONMENT:ADMIN
     networks:
       - storage
       - frontend
@@ -111,7 +123,7 @@ services:
     depends_on:
       - management_api
     environment:
-      - MGMT_API_URL=http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/
+      - MGMT_API_URL=${GRAVITEE_API_BASE_URL}/management_api/management/organizations/DEFAULT/environments/DEFAULT/
     volumes:
       - ./gravitee/apim-management-ui/logs:/var/log/nginx
     networks:
@@ -127,7 +139,7 @@ services:
     depends_on:
       - management_api
     environment:
-      - PORTAL_API_URL=http://localhost:8083/portal/environments/DEFAULT
+      - PORTAL_API_URL=${GRAVITEE_API_BASE_URL}/portal/environments/DEFAULT
     volumes:
       - ./gravitee/apim-portal-ui/logs:/var/log/nginx
     networks:
@@ -200,8 +212,8 @@ services:
       - WIS2_GDC_BACKEND=Elasticsearch
       - WIS2_GDC_CONNECTION=http://elasticsearch:9200/wis2-discovery-metadata
       - WIS2_GDC_COLLECTION_INDEX=metadata_collection
-      - EWC_URL=http://localhost:8082/api-manager
-      - AWS_URL=http://example.org
+      - EWC_URL=${EWC_URL}
+      - AWS_URL=${AWS_URL}
     networks:
       - catalog
 
@@ -214,7 +226,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - BASE_URL=http://localhost:8082/api-manager
+      - BASE_URL=${APIMANAGER_BASE_URL}
       - ELASTICSEARCH_URL=http://gateway:8082
       - ELASTICSEARCH_TOKEN=${ELASTICSEARCH_TOKEN}
     networks:
@@ -223,7 +235,9 @@ services:
   catalog_ui:
     build:
       context: ./catalog-ui
-      dockerfile: dev.Dockerfile
+      dockerfile: Dockerfile
+      args:
+        - ELASTICSEARCH_URL=http://elasticsearch:9200
     container_name: catalog_ui
     depends_on:
       - elasticsearch
@@ -233,17 +247,25 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
     networks:
       - catalog
-    volumes:
-      - ./catalog-ui:/app
-      - /app/node_modules
+      - ui
 
   nginx:
-    build:
-      context: ./nginx
+    image: nginx:alpine
     container_name: nginx_container
     depends_on:
       - management_ui
     ports:
       - 80:80
+      - 443:443
     networks:
-        - nginx
+      - nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw

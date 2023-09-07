@@ -15,4 +15,10 @@ POSTGRESQL_VERSION=15.4
 POSTGRESQL_DB=keycloakdb
 POSTGRESQL_USER=keycloak
 POSTGRESQL_PASS=password
+
+GRAVITEE_API_BASE_URL=http://localhost:8083
+
 ELASTICSEARCH_TOKEN=1234
+EWC_URL=http://localhost:8082/api-manager
+AWS_URL=http://example.org
+APIMANAGER_BASE_URL=http://localhost:8082/api-manager
