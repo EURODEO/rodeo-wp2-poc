@@ -24,6 +24,8 @@ networks:
     name: storage
   catalog:
     name: catalog
+  ui:
+    name: ui
 
 services:
   mongodb:
@@ -79,6 +81,7 @@ services:
       - storage
       - frontend
       - nginx
+      - ui
 
   management_api:
     image: graviteeio/apim-management-api:${APIM_VERSION:-4}
@@ -92,6 +95,7 @@ services:
     volumes:
       - ./gravitee/apim-management-api/logs:/opt/graviteeio-management-api/logs
       - ./gravitee/apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext
+      - ./gravitee-config/gravitee.yml:/opt/graviteeio-management-api/config/gravitee.yml
     environment:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_analytics_elasticsearch_endpoints_0=http://elasticsearch-apim:9200
@@ -111,7 +115,7 @@ services:
     depends_on:
       - management_api
     environment:
-      - MGMT_API_URL=http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/
+      - MGMT_API_URL=${GRAVITEE_API_BASE_URL}/management/organizations/DEFAULT/environments/DEFAULT/
     volumes:
       - ./gravitee/apim-management-ui/logs:/var/log/nginx
     networks:
@@ -127,7 +131,7 @@ services:
     depends_on:
       - management_api
     environment:
-      - PORTAL_API_URL=http://localhost:8083/portal/environments/DEFAULT
+      - PORTAL_API_URL=${GRAVITEE_API_BASE_URL}/portal/environments/DEFAULT
     volumes:
       - ./gravitee/apim-portal-ui/logs:/var/log/nginx
     networks:
@@ -200,8 +204,8 @@ services:
       - WIS2_GDC_BACKEND=Elasticsearch
       - WIS2_GDC_CONNECTION=http://elasticsearch:9200/wis2-discovery-metadata
       - WIS2_GDC_COLLECTION_INDEX=metadata_collection
-      - EWC_URL=http://localhost:8082/api-manager
-      - AWS_URL=http://example.org
+      - EWC_URL=${EWC_URL}
+      - AWS_URL=${AWS_URL}
     networks:
       - catalog
 
@@ -214,7 +218,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - BASE_URL=http://localhost:8082/api-manager
+      - BASE_URL=${APIMANAGER_BASE_URL}
       - ELASTICSEARCH_URL=http://gateway:8082
       - ELASTICSEARCH_TOKEN=${ELASTICSEARCH_TOKEN}
     networks:
@@ -235,10 +239,10 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
     networks:
       - catalog
+      - ui
 
   nginx:
-    build:
-      context: ./nginx
+    image: nginx:alpine
     container_name: nginx_container
     depends_on:
       - management_ui
@@ -246,3 +250,5 @@ services:
       - 80:80
     networks:
       - nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
