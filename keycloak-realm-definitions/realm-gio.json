@@ -3,7 +3,7 @@
   "realm": "gio",
   "displayName": "Keycloak",
   "displayNameHtml": "<div class=\"kc-logo-text\"><span>Keycloak</span></div>",
-  "notBefore": 0,
+  "notBefore": 1694079464,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
@@ -29,7 +29,7 @@
   "oauth2DevicePollingInterval": 600,
   "enabled": true,
   "sslRequired": "external",
-  "registrationAllowed": false,
+  "registrationAllowed": true,
   "registrationEmailAsUsername": false,
   "rememberMe": false,
   "verifyEmail": false,
@@ -54,10 +54,14 @@
         "composite": true,
         "composites": {
           "realm": [
+            "gravitee-user",
             "offline_access",
             "uma_authorization"
           ],
           "client": {
+            "gravitee-client": [
+              "gravitee-user"
+            ],
             "account": [
               "manage-account",
               "view-profile"
@@ -67,6 +71,19 @@
         "clientRole": false,
         "containerId": "gio",
         "attributes": {}
+      },
+      {
+        "id": "41656566-26a5-4ddb-85ac-55697947707d",
+        "name": "gravitee-admin",
+        "description": "organization admin roles\n- ENVIRONMENT:ADMIN\n- ORGANIZATION:ADMIN",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "gio",
+        "attributes": {
+          "ORGANIZATION": [
+            "admin"
+          ]
+        }
       },
       {
         "id": "d632d3c7-c728-46fb-a83a-6bf6df427fb9",
@@ -97,8 +114,8 @@
               "manage-users",
               "query-clients",
               "manage-identity-providers",
-              "manage-authorization",
               "create-client",
+              "manage-authorization",
               "manage-realm",
               "view-identity-providers",
               "view-clients",
@@ -130,9 +147,234 @@
         "clientRole": false,
         "containerId": "gio",
         "attributes": {}
+      },
+      {
+        "id": "ce8ea1a7-836e-413e-8f5c-d41cde8f05c5",
+        "name": "gravitee-user",
+        "description": "organization admin roles\n- ENVIRONMENT:USER\n- ORGANIZATION:USER",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "gio",
+        "attributes": {
+          "ORGANIZATION": [
+            "USER"
+          ]
+        }
       }
     ],
     "client": {
+      "realm-management": [
+        {
+          "id": "667ec29f-6fe9-45a5-8afa-d64012c5c5ae",
+          "name": "manage-users",
+          "description": "${role_manage-users}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "1bc69d3f-bb17-48fe-b294-95bb48d98837",
+          "name": "view-users",
+          "description": "${role_view-users}",
+          "composite": true,
+          "composites": {
+            "client": {
+              "realm-management": [
+                "query-groups",
+                "query-users"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "d7420e68-2fcc-494e-ae08-5cdff58f5cde",
+          "name": "view-authorization",
+          "description": "${role_view-authorization}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "184fa5e1-36ba-45cf-a707-72b0aa508ebd",
+          "name": "view-realm",
+          "description": "${role_view-realm}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "30638303-1da9-481a-a607-9122225cbd5d",
+          "name": "manage-authorization",
+          "description": "${role_manage-authorization}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "8a8a9057-0dc0-4d84-9314-40e7d3c3f8b5",
+          "name": "view-clients",
+          "description": "${role_view-clients}",
+          "composite": true,
+          "composites": {
+            "client": {
+              "realm-management": [
+                "query-clients"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "12173dad-982d-4245-b5b5-bf9b9c530da5",
+          "name": "create-client",
+          "description": "${role_create-client}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "3049cd9c-c466-4581-a5f7-a9a3865ebc86",
+          "name": "query-clients",
+          "description": "${role_query-clients}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "bb6e2307-cb25-46ff-a71e-ddddd292d50c",
+          "name": "realm-admin",
+          "description": "${role_realm-admin}",
+          "composite": true,
+          "composites": {
+            "client": {
+              "realm-management": [
+                "manage-users",
+                "view-users",
+                "view-authorization",
+                "view-realm",
+                "manage-authorization",
+                "view-clients",
+                "create-client",
+                "view-events",
+                "query-clients",
+                "query-groups",
+                "manage-realm",
+                "query-users",
+                "impersonation",
+                "query-realms",
+                "manage-clients",
+                "manage-identity-providers",
+                "view-identity-providers",
+                "manage-events"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "a3682a49-2063-4aec-8085-5552e66570a2",
+          "name": "view-events",
+          "description": "${role_view-events}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "efc71559-8556-4645-be8e-dfa76233c990",
+          "name": "query-groups",
+          "description": "${role_query-groups}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "d5866c2f-8883-4f2f-b959-a181f66878a4",
+          "name": "manage-realm",
+          "description": "${role_manage-realm}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "69a23c1c-43a9-4282-9bd3-79d5a0ca33ce",
+          "name": "impersonation",
+          "description": "${role_impersonation}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "f48089b3-03d9-4b75-867f-7c27ea29575a",
+          "name": "query-users",
+          "description": "${role_query-users}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "5992232e-46eb-40f7-89d0-c47f63e5ab8c",
+          "name": "query-realms",
+          "description": "${role_query-realms}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "ad3abeb9-e371-42bd-bbb6-2879442aff81",
+          "name": "manage-clients",
+          "description": "${role_manage-clients}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "2078d08d-b364-4133-89b7-8899e7b83e8f",
+          "name": "manage-identity-providers",
+          "description": "${role_manage-identity-providers}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "9e0277d7-aed3-4363-aafd-b0751bff8b92",
+          "name": "manage-events",
+          "description": "${role_manage-events}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        },
+        {
+          "id": "142da73c-410d-4515-93ff-af6b90e63ea8",
+          "name": "view-identity-providers",
+          "description": "${role_view-identity-providers}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+          "attributes": {}
+        }
+      ],
       "gravitee-client": [
         {
           "id": "c42486ae-851a-4b1f-aba7-d8ebff15b06e",
@@ -141,22 +383,27 @@
           "clientRole": true,
           "containerId": "c4e0a586-eeec-4775-bbbd-b7f034aa7853",
           "attributes": {}
-        }
-      ],
-      "security-admin-console": [],
-      "admin-cli": [],
-      "account-console": [],
-      "broker": [
+        },
         {
-          "id": "3fefd4be-751e-4c17-a96b-02c0d8d9f9b9",
-          "name": "read-token",
-          "description": "${role_read-token}",
+          "id": "97710f30-8fd5-4cae-b8c9-6b17864e295a",
+          "name": "gravitee-user",
+          "description": "Organization normal users \n- ENVIRONMENT:USER \n- ORGANIZATION:USER",
           "composite": false,
           "clientRole": true,
-          "containerId": "8266ec30-a83a-400b-8c22-1345c59195fd",
+          "containerId": "c4e0a586-eeec-4775-bbbd-b7f034aa7853",
+          "attributes": {}
+        },
+        {
+          "id": "2133debf-0b98-4e5f-bc65-4d70a43c2de4",
+          "name": "gravitee-admin",
+          "description": "Organization admin users\n- ENVIRONMENT:ADMIN\n- ORGANIZATION:ADMIN",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "c4e0a586-eeec-4775-bbbd-b7f034aa7853",
           "attributes": {}
         }
       ],
+      "security-admin-console": [],
       "gio-realm": [
         {
           "id": "95387dfc-0a34-4f0b-8a65-a14b0d69f1ce",
@@ -336,6 +583,19 @@
           "attributes": {}
         }
       ],
+      "admin-cli": [],
+      "account-console": [],
+      "broker": [
+        {
+          "id": "3fefd4be-751e-4c17-a96b-02c0d8d9f9b9",
+          "name": "read-token",
+          "description": "${role_read-token}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "8266ec30-a83a-400b-8c22-1345c59195fd",
+          "attributes": {}
+        }
+      ],
       "account": [
         {
           "id": "68467b72-faff-44d7-b0a8-60a0b7824a24",
@@ -417,7 +677,35 @@
       ]
     }
   },
-  "groups": [],
+  "groups": [
+    {
+      "id": "ddd3e7a4-ba7f-4d01-b4fc-d75ecb22ae96",
+      "name": "gravitee-admin",
+      "path": "/gravitee-admin",
+      "attributes": {},
+      "realmRoles": [
+        "gravitee-admin",
+        "admin"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "05771b15-37ae-4f67-9a35-fee987708270",
+      "name": "gravitee-user",
+      "path": "/gravitee-user",
+      "attributes": {},
+      "realmRoles": [
+        "gravitee-user"
+      ],
+      "clientRoles": {
+        "gravitee-client": [
+          "gravitee-user"
+        ]
+      },
+      "subGroups": []
+    }
+  ],
   "defaultRole": {
     "id": "5fa23258-f8c7-45b4-bc0c-72966e8c83da",
     "name": "default-roles-gio",
@@ -463,18 +751,8 @@
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
-  "clientProfiles": {
-    "profiles": []
-  },
-  "clientPolicies": {
-    "policies": [
-      {
-        "name": "builtin-default-policy",
-        "builtin": true,
-        "enable": false
-      }
-    ]
-  },
+  "clientProfiles": {},
+  "clientPolicies": {},
   "users": [
     {
       "id": "f637d556-1314-4519-a7ed-24a7f62ab530",
@@ -487,11 +765,13 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-gio"
+        "default-roles-gio",
+        "gravitee-user"
       ],
       "clientRoles": {
         "gravitee-client": [
-          "uma_protection"
+          "uma_protection",
+          "gravitee-user"
         ]
       },
       "notBefore": 0,
@@ -504,9 +784,25 @@
       "roles": [
         "offline_access"
       ]
+    },
+    {
+      "clientScope": "gravitee-client-groups",
+      "roles": [
+        "gravitee-admin",
+        "gravitee-user"
+      ]
     }
   ],
   "clientScopeMappings": {
+    "gravitee-client": [
+      {
+        "clientScope": "gravitee-client-groups",
+        "roles": [
+          "gravitee-admin",
+          "gravitee-user"
+        ]
+      }
+    ],
     "account": [
       {
         "client": "account-console",
@@ -686,6 +982,43 @@
       ]
     },
     {
+      "id": "eadfbdd8-39e5-47ad-a67d-5e5cb85a1fde",
+      "clientId": "gio-realm",
+      "name": "gio Realm",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": true,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {},
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": false,
+      "nodeReRegistrationTimeout": 0,
+      "defaultClientScopes": [
+        "web-origins",
+        "roles",
+        "profile",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
       "id": "c4e0a586-eeec-4775-bbbd-b7f034aa7853",
       "clientId": "gravitee-client",
       "rootUrl": "http://localhost:8084",
@@ -694,11 +1027,12 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "00dc0118-2a0d-4249-86a3-3e133f5de145",
+      "secret": "**********",
       "redirectUris": [
+        "http://127.0.0.1:8085/*",
+        "http://localhost/management_ui/*",
         "http://localhost:8084/*",
-		"http://localhost/management_ui/*",
-		"http://127.0.0.1:8085/*"
+		"http://localhost:8085/*"
       ],
       "webOrigins": [
         "http://localhost:8084"
@@ -749,6 +1083,7 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientAddress",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientAddress",
@@ -763,6 +1098,7 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientId",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientId",
@@ -777,6 +1113,7 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientHost",
+            "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
@@ -785,16 +1122,17 @@
         }
       ],
       "defaultClientScopes": [
-        "web-origins",
         "roles",
-        "profile",
-        "email"
+        "gravitee-client-groups"
       ],
       "optionalClientScopes": [
+        "web-origins",
         "address",
         "phone",
         "offline_access",
-        "microprofile-jwt"
+        "profile",
+        "microprofile-jwt",
+        "email"
       ],
       "authorizationSettings": {
         "allowRemoteResourceManagement": true,
@@ -841,9 +1179,9 @@
       }
     },
     {
-      "id": "eadfbdd8-39e5-47ad-a67d-5e5cb85a1fde",
-      "clientId": "gio-realm",
-      "name": "gio Realm",
+      "id": "64aa04ae-c089-4b7e-88de-23c83e3b1c0c",
+      "clientId": "realm-management",
+      "name": "${client_realm-management}",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -859,22 +1197,13 @@
       "serviceAccountsEnabled": false,
       "publicClient": false,
       "frontchannelLogout": false,
+      "protocol": "openid-connect",
       "attributes": {},
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "roles",
-        "profile",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "microprofile-jwt"
-      ]
+      "defaultClientScopes": [],
+      "optionalClientScopes": []
     },
     {
       "id": "150f563b-5fc4-4262-a75f-73c8f13aa10e",
@@ -1107,6 +1436,34 @@
       ]
     },
     {
+      "id": "a6276d7b-eb6f-4cf5-bc43-199e7e047436",
+      "name": "gravitee-client-groups",
+      "description": "organization roles",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "id": "5d2e049a-838d-4738-bafa-a654d415e354",
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-client-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "groups",
+            "jsonType.label": "String",
+            "usermodel.clientRoleMapping.clientId": "gravitee-client"
+          }
+        }
+      ]
+    },
+    {
       "id": "ee4e2683-7768-4f81-8a58-fc266cbda8b9",
       "name": "microprofile-jwt",
       "description": "Microprofile - JWT built-in scope",
@@ -1139,6 +1496,7 @@
           "consentRequired": false,
           "config": {
             "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
             "id.token.claim": "true",
             "access.token.claim": "true",
@@ -1442,8 +1800,8 @@
     "xContentTypeOptions": "nosniff",
     "xRobotsTag": "none",
     "xFrameOptions": "SAMEORIGIN",
-    "xXSSProtection": "1; mode=block",
     "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
+    "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
   "smtpServer": {},
@@ -1455,7 +1813,7 @@
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
   "identityProviders": [
-     {
+    {
       "alias": "github",
       "internalId": "b6003fc7-f068-4bda-8330-57556f3b9437",
       "providerId": "github",
@@ -1473,8 +1831,21 @@
         "clientId": "4daed3cb29acff70b91c",
         "useJwksUrl": "true"
       }
-    }],
-  "identityProviderMappers": [],
+    }
+  ],
+  "identityProviderMappers": [
+    {
+      "id": "b810774b-0907-40bf-a1f5-55aa5b09b156",
+      "name": "gravitee-user",
+      "identityProviderAlias": "github",
+      "identityProviderMapper": "oidc-hardcoded-role-idp-mapper",
+      "config": {
+        "syncMode": "FORCE",
+        "jsonField": "test",
+        "role": "gravitee-client.gravitee-user"
+      }
+    }
+  ],
   "components": {
     "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
       {
@@ -1497,14 +1868,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
-            "saml-user-property-mapper",
             "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-property-mapper",
-            "oidc-full-name-mapper",
-            "saml-role-list-mapper",
             "saml-user-attribute-mapper",
-            "oidc-address-mapper"
+            "saml-user-property-mapper",
+            "saml-role-list-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-address-mapper",
+            "oidc-full-name-mapper"
           ]
         }
       },
@@ -1516,14 +1887,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-sha256-pairwise-sub-mapper",
             "saml-user-property-mapper",
             "oidc-usermodel-property-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-address-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-full-name-mapper",
-            "saml-role-list-mapper"
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-attribute-mapper",
+            "saml-role-list-mapper",
+            "oidc-address-mapper"
           ]
         }
       },
@@ -1626,7 +1997,7 @@
   "supportedLocales": [],
   "authenticationFlows": [
     {
-      "id": "94d6d28f-24db-43be-b544-6834dec65ed9",
+      "id": "8fddce62-56e5-4667-90f6-3a3a347cdfea",
       "alias": "Account verification options",
       "description": "Method with which to verity the existing account",
       "providerId": "basic-flow",
@@ -1652,7 +2023,7 @@
       ]
     },
     {
-      "id": "706e1cab-2cae-4595-b807-35bbd8ea54d3",
+      "id": "d72b03e8-4292-4b6f-9af7-db69439c5b8e",
       "alias": "Authentication Options",
       "description": "Authentication options.",
       "providerId": "basic-flow",
@@ -1686,7 +2057,7 @@
       ]
     },
     {
-      "id": "25ed500a-c2af-450a-875f-cc96cc062eae",
+      "id": "5cc27720-8bfb-4fda-b68b-7239c6de5e18",
       "alias": "Browser - Conditional OTP",
       "description": "Flow to determine if the OTP is required for the authentication",
       "providerId": "basic-flow",
@@ -1712,7 +2083,7 @@
       ]
     },
     {
-      "id": "6e774b73-7e10-4aee-82f4-6353e6f3ac95",
+      "id": "22f7dac8-76db-4f85-b074-701c852cc177",
       "alias": "Direct Grant - Conditional OTP",
       "description": "Flow to determine if the OTP is required for the authentication",
       "providerId": "basic-flow",
@@ -1738,7 +2109,7 @@
       ]
     },
     {
-      "id": "a37ff481-c5b1-42dc-8245-7131018efcf3",
+      "id": "cb8ec01c-ca7a-45b9-aef0-af335f78ff34",
       "alias": "First broker login - Conditional OTP",
       "description": "Flow to determine if the OTP is required for the authentication",
       "providerId": "basic-flow",
@@ -1764,7 +2135,7 @@
       ]
     },
     {
-      "id": "0d7800c4-2d5c-4d25-9c5c-2d5340e6aba1",
+      "id": "2e651952-1bab-4424-9712-8663e7960ba7",
       "alias": "Handle Existing Account",
       "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
       "providerId": "basic-flow",
@@ -1790,7 +2161,7 @@
       ]
     },
     {
-      "id": "e5d15f85-cf49-4555-9962-87e6bde80960",
+      "id": "ce227dd9-f074-43b6-9a67-55798bb6bbb2",
       "alias": "Reset - Conditional OTP",
       "description": "Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.",
       "providerId": "basic-flow",
@@ -1816,7 +2187,7 @@
       ]
     },
     {
-      "id": "5a383821-ec4f-49bc-9e42-efce3735984d",
+      "id": "8fb7555f-b4b9-4781-8f1e-3d24c2f98dcc",
       "alias": "User creation or linking",
       "description": "Flow for the existing/non-existing user alternatives",
       "providerId": "basic-flow",
@@ -1843,7 +2214,7 @@
       ]
     },
     {
-      "id": "3ccf29ca-07fb-4ea9-9104-7e985f8e4cd8",
+      "id": "15620eca-dc9f-42b7-8380-8a69c7ff568c",
       "alias": "Verify Existing Account by Re-authentication",
       "description": "Reauthentication of existing account",
       "providerId": "basic-flow",
@@ -1869,7 +2240,7 @@
       ]
     },
     {
-      "id": "4e736835-f6a5-47c0-b3e7-20015d69685b",
+      "id": "e14073b9-edf6-4b5b-8743-1b137f38304c",
       "alias": "browser",
       "description": "browser based authentication",
       "providerId": "basic-flow",
@@ -1911,7 +2282,7 @@
       ]
     },
     {
-      "id": "e526fc16-1e37-4e5b-ae1d-3d5bb2ac16fe",
+      "id": "0c871905-2ed5-477e-a28a-55fe1c508f2a",
       "alias": "clients",
       "description": "Base authentication for clients",
       "providerId": "client-flow",
@@ -1953,7 +2324,7 @@
       ]
     },
     {
-      "id": "4bbaafc7-b76b-40f2-8f44-eb8aaa69a7de",
+      "id": "36c8fa1d-9253-49ff-a21a-382177a9f9c7",
       "alias": "direct grant",
       "description": "OpenID Connect Resource Owner Grant",
       "providerId": "basic-flow",
@@ -1987,7 +2358,7 @@
       ]
     },
     {
-      "id": "64685edb-993d-48f0-847d-97df1c10f885",
+      "id": "50b23fd3-da85-41aa-b0f5-0804a9c16528",
       "alias": "docker auth",
       "description": "Used by Docker clients to authenticate against the IDP",
       "providerId": "basic-flow",
@@ -2005,7 +2376,7 @@
       ]
     },
     {
-      "id": "559a9322-f1b8-4728-975b-23d4c1520dab",
+      "id": "d7e8e449-bf64-4445-aa7f-af97eca63f38",
       "alias": "first broker login",
       "description": "Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account",
       "providerId": "basic-flow",
@@ -2032,7 +2403,7 @@
       ]
     },
     {
-      "id": "ab51b08c-451f-461f-9ab2-c1796bc2b934",
+      "id": "1d8ec599-ba5d-4a1e-92b8-2e5f4f86e140",
       "alias": "forms",
       "description": "Username, password, otp and other auth forms.",
       "providerId": "basic-flow",
@@ -2058,7 +2429,7 @@
       ]
     },
     {
-      "id": "68d0402e-c202-4ee1-bab8-ba8f1392503f",
+      "id": "8e6c5789-0699-461a-9e23-3333e72a6f1e",
       "alias": "http challenge",
       "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
       "providerId": "basic-flow",
@@ -2084,7 +2455,7 @@
       ]
     },
     {
-      "id": "40f87826-f1e3-49b2-a708-848a3c6b97b4",
+      "id": "6e762b5e-95ca-43b5-b208-f1432e8b6858",
       "alias": "registration",
       "description": "registration flow",
       "providerId": "basic-flow",
@@ -2103,7 +2474,7 @@
       ]
     },
     {
-      "id": "e350c165-455c-47e3-8bda-142b8468cd28",
+      "id": "7eda9d80-6825-425c-a236-5ed5ce766a45",
       "alias": "registration form",
       "description": "registration form",
       "providerId": "form-flow",
@@ -2145,7 +2516,7 @@
       ]
     },
     {
-      "id": "83f94300-7e44-47a2-86f2-196fa3407512",
+      "id": "2cd6df5d-b8c9-4b84-a7ad-a5a455b622a9",
       "alias": "reset credentials",
       "description": "Reset credentials for a user if they forgot their password or something",
       "providerId": "basic-flow",
@@ -2187,7 +2558,7 @@
       ]
     },
     {
-      "id": "575c3f02-3de6-46be-9b22-ed5307ebf422",
+      "id": "23588304-bcde-4b75-9f5a-d13927100c72",
       "alias": "saml ecp",
       "description": "SAML ECP Profile Authentication Flow",
       "providerId": "basic-flow",
@@ -2207,14 +2578,14 @@
   ],
   "authenticatorConfig": [
     {
-      "id": "22130402-a6e2-4093-bc90-8aa1625b2392",
+      "id": "ce495940-c45b-4208-a2f8-2d85f7a5d134",
       "alias": "create unique user config",
       "config": {
         "require.password.update.after.registration": "false"
       }
     },
     {
-      "id": "1e586ac5-30e0-4be2-95c8-c9271fd51a72",
+      "id": "17411774-9709-4e4d-b243-a5c7c30336e5",
       "alias": "review profile config",
       "config": {
         "update.profile.on.first.login": "missing"
@@ -2292,7 +2663,18 @@
   "resetCredentialsFlow": "reset credentials",
   "clientAuthenticationFlow": "clients",
   "dockerAuthenticationFlow": "docker auth",
-  "attributes": {},
+  "attributes": {
+    "cibaBackchannelTokenDeliveryMode": "poll",
+    "cibaExpiresIn": "120",
+    "cibaAuthRequestedUserHint": "login_hint",
+    "oauth2DeviceCodeLifespan": "600",
+    "clientOfflineSessionMaxLifespan": "0",
+    "oauth2DevicePollingInterval": "600",
+    "clientSessionIdleTimeout": "0",
+    "clientSessionMaxLifespan": "0",
+    "clientOfflineSessionIdleTimeout": "0",
+    "cibaInterval": "5"
+  },
   "keycloakVersion": "13.0.0",
   "userManagedAccessAllowed": false
 }

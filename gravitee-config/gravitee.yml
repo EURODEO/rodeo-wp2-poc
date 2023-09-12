@@ -271,7 +271,7 @@ security:
     - type: oidc
       id: keycloak # not required if not present, the type is used
       clientId: gravitee-client
-      clientSecret: 00dc0118-2a0d-4249-86a3-3e133f5de145
+      clientSecret: 09fa1e53-c788-4ae7-a779-5077cbfd5b6e
       tokenIntrospectionEndpoint: http://auth.localhost/auth/realms/gio/protocol/openid-connect/token/introspect
       tokenEndpoint: http://auth.localhost/auth/realms/gio/protocol/openid-connect/token
       authorizeEndpoint: http://auth.localhost/auth/realms/gio/protocol/openid-connect/auth
@@ -289,7 +289,12 @@ security:
         firstname: given_name
         picture: picture
       roleMapping:
-        - condition: "{#jsonPath(#profile,'$.groups[0]') == 'gravitee-admin'}"
+        - condition: "{#jsonPath(#profile,'$.groups') != null && #jsonPath(#profile,'$.groups') matches 'gravitee-user'}"
+          roles:
+            - "ORGANIZATION:USER"
+            - "ENVIRONMENT:USER"
+            
+        - condition: "{#jsonPath(#profile,'$.groups') != null && #jsonPath(#profile,'$.groups') matches 'gravitee-admin'}"
           roles:
             - "ORGANIZATION:ADMIN"
             - "ENVIRONMENT:ADMIN"
