@@ -2,6 +2,8 @@
 .env
 /gravitee/elasticsearch/data/**
 /gravitee/mongodb/data/**
+/gravitee/apim-management-api/plugins/.work/**
+/gravitee/apim-gateway/plugins/.work/**
 /keycloak/postgres-data/**
 /conf/
 /elasticsearch-data/**
