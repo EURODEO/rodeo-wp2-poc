@@ -58,9 +58,9 @@ def addQueryDictToQueryString (mutable, toBeAdded):
 def replaceEverything (str: str, id: str) -> str:
     metadataHits = client.search(index="metadata_collection", query={"match":{"original_metadata_id":id}})['hits']['hits'] # TODO Now this is called twice
     metadataHits.sort(key=lambda hit: -len(hit['_source']['href']))
-    res = "testitesti " + json.dumps(metadataHits) #str
+    res = str
     for hit in metadataHits:
-        str = str.replace(hit['_source']['href'], BASE_URL + '/' + hit['_id'])
+        res = res.replace(hit['_source']['href'], BASE_URL + '/' + hit['_id'])
     return res
 
 def getData(id, path, queryargs):
