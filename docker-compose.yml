@@ -141,8 +141,8 @@ services:
   keycloak:
     image: jboss/keycloak:${KEYCLOAK_VERSION:-13.0.0}
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: password
+      KEYCLOAK_USER: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       PROXY_ADDRESS_FORWARDING: "true"
       KEYCLOAK_IMPORT: /tmp/realm-gio.json
       JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.upload_scripts=enabled"
@@ -150,7 +150,7 @@ services:
       DB_VENDOR: postgres
       DB_DATABASE: keycloak
       DB_USER: keycloak
-      DB_PASSWORD: password
+      DB_PASSWORD: ${KC_DB_PASSWORD}
     restart: always
     expose:
       - 8080
