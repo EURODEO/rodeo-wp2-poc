@@ -230,6 +230,7 @@ services:
       dockerfile: Dockerfile
       args:
         - ELASTICSEARCH_URL=http://elasticsearch:9200
+        - UI_BASE_PATH=${UI_BASE_PATH}
     container_name: catalog_ui
     depends_on:
       - elasticsearch
@@ -237,6 +238,7 @@ services:
       - "3000:3000"
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - UI_BASE_PATH=${UI_BASE_PATH}
     networks:
       - catalog
       - ui

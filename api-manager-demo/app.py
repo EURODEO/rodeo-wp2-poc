@@ -55,6 +55,14 @@ def addQueryDictToQueryString (mutable, toBeAdded):
     for key in toBeAdded:
         mutable[key] = toBeAdded[key]
 
+def replaceEverything (str: str, id: str) -> str:
+    metadataHits = client.search(index="metadata_collection", query={"match":{"original_metadata_id":id}})['hits']['hits'] # TODO Now this is called twice
+    metadataHits.sort(key=lambda hit: -len(hit['_source']['href']))
+    res = "testitesti " + json.dumps(metadataHits) #str
+    for hit in metadataHits:
+        str = str.replace(hit['_source']['href'], BASE_URL + '/' + hit['_id'])
+    return res
+
 def getData(id, path, queryargs):
     url, metadataId = getRealLink(id)
     if url == None:
@@ -76,6 +84,6 @@ def getData(id, path, queryargs):
     if 'links' in data:
         data['links'] = mapLinks(filter(typeIsValid, data['links']), metadataId)
     
-    resp = make_response(json.dumps(data))
+    resp = make_response(replaceEverything(json.dumps(data), metadataId))
     resp.content_type = req.getheader('Content-Type')
     return resp

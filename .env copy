@@ -22,3 +22,5 @@ ELASTICSEARCH_TOKEN=1234
 EWC_URL=http://localhost/api-manager
 AWS_URL=http://example.org
 APIMANAGER_BASE_URL=http://localhost/api-manager
+
+UI_BASE_PATH=/ui
