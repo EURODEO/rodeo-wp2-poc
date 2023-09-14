@@ -1,3 +1,6 @@
+MONGODB_VERSION=4.4.18
+APIM_VERSION=3
+
 KC_DB=postgres
 KC_DB_URL_HOST=postgres
 KC_DB_URL_DATABASE=keycloakdb
@@ -18,3 +21,5 @@ ELASTICSEARCH_TOKEN=1234
 EWC_URL=http://localhost/gateway/api-manager
 AWS_URL=http://example.org
 APIMANAGER_BASE_URL=http://localhost/gateway/api-manager
+
+UI_BASE_PATH=/ui

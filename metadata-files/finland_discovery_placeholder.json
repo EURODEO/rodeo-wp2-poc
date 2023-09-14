@@ -1,0 +1,107 @@
+{
+  "id": "placeholder-finland",
+  "conformsTo": ["http://wis.wmo.int/spec/wcmp/2.0"],
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [20.6455928891, 59.846373196],
+        [31.5160921567, 59.846373196],
+        [31.5160921567, 70.1641930203],
+        [20.6455928891, 70.1641930203],
+        [20.6455928891, 59.846373196]
+      ]
+    ]
+  },
+  "properties": {
+    "identifier": "Placeholder",
+    "title": "Observations from Finland",
+    "description": "Observations from Finland",
+    "themes": [
+      {
+        "concepts": [
+          {
+            "id": "surface weather"
+          },
+          {
+            "id": "temperature"
+          },
+          {
+            "id": "observations"
+          }
+        ]
+      },
+      {
+        "concepts": [
+          {
+            "id": "weatherObservations"
+          },
+          {
+            "id": "synopticMeteorology"
+          }
+        ],
+        "scheme": "https://github.com/wmo-im/wcmp-codelists/blob/main/codelists/WMO_CategoryCode.csv"
+      }
+    ],
+    "language": "en",
+    "type": "dataset",
+    "created": "2023-09-13T09:28:00Z",
+    "updated": "2023-09-13",
+    "rights": null,
+    "providers": [
+      {
+        "name": "Placeholder",
+        "positionName": "Placeholder",
+        "contactInfo": {
+          "phone": {
+            "office": "Placeholder"
+          },
+          "email": {
+            "office": "Placeholder"
+          },
+          "address": {
+            "office": {
+              "deliveryPoint": "Placeholder",
+              "city": "Placeholder",
+              "administrativeArea": "Placeholder",
+              "postalCode": "Placeholder",
+              "country": "Placeholder"
+            }
+          },
+          "hoursOfService": "Placeholder",
+          "contactInstructions": "Placeholder",
+          "url": {
+            "rel": "canonical",
+            "type": "text/html",
+            "href": "Placeholder"
+          }
+        },
+        "roles": [
+          {
+            "name": "pointOfContact"
+          },
+          {
+            "name": "distributor"
+          }
+        ]
+      }
+    ],
+    "wmo:topicHierarchy": "Placeholder",
+    "wmo:dataPolicy": "core",
+    "_metadata-anytext": "Finland weather temperature placeholder",
+    "id": "placeholder-finland"
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "https://opendata.fmi.fi/edr/collections",
+      "type": "application/json",
+      "title": "Collections Finland"
+    }
+  ],
+  "time": {
+    "interval": ["2023-09-13", null],
+    "resolution": "Placeholder"
+  }
+}

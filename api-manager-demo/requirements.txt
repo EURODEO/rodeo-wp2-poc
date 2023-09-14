@@ -1,3 +1,4 @@
 elasticsearch
 flask
 waitress
+flask-cors

@@ -1,4 +1,5 @@
 from flask import Flask, request, abort, make_response
+from flask_cors import CORS
 from elasticsearch import Elasticsearch, exceptions
 import urllib
 import json
@@ -12,6 +13,7 @@ DEFAULT_QUERY_PARAMETERS = {'f': 'json'}
 client = Elasticsearch(ELASTICSEARCH_URL, bearer_auth=ELASTICSEARCH_TOKEN)
 
 app = Flask(__name__)
+cors = CORS(app)
 
 @app.route('/<id>', methods=['GET'])
 def withoutpath(id):
@@ -55,6 +57,14 @@ def addQueryDictToQueryString (mutable, toBeAdded):
     for key in toBeAdded:
         mutable[key] = toBeAdded[key]
 
+def replaceEverything (str: str, id: str) -> str:
+    metadataHits = client.search(index="metadata_collection", query={"match":{"original_metadata_id":id}})['hits']['hits'] # TODO Now this is called twice
+    metadataHits.sort(key=lambda hit: -len(hit['_source']['href']))
+    res = str
+    for hit in metadataHits:
+        res = res.replace(hit['_source']['href'], BASE_URL + '/' + hit['_id'])
+    return res
+
 def getData(id, path, queryargs):
     url, metadataId = getRealLink(id)
     if url == None:
@@ -71,11 +81,18 @@ def getData(id, path, queryargs):
         url = url._replace(path = url.path + '/' + path)
     
     req = urllib.request.urlopen(urllib.parse.urlunparse(url))
-    data = json.loads((req).read())
+    data = (req).read()
+    try:
+        jsdata = json.loads(data)
     
-    if 'links' in data:
-        data['links'] = mapLinks(filter(typeIsValid, data['links']), metadataId)
+        if 'links' in jsdata:
+            jsdata['links'] = mapLinks(filter(typeIsValid, jsdata['links']), metadataId)
+
+        data = json.dumps(jsdata)
+    except:
+        data = data.decode("utf-8")
     
-    resp = make_response(json.dumps(data))
+    resp = make_response(replaceEverything(data, metadataId))
     resp.content_type = req.getheader('Content-Type')
+    resp
     return resp

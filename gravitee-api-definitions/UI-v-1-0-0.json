@@ -1,0 +1,117 @@
+{
+  "name" : "UI",
+  "crossId" : "80383637-422f-4eba-b836-37422f7eba9f",
+  "version" : "v.1.0.0",
+  "execution_mode" : "v3",
+  "description" : "Catalog UI",
+  "visibility" : "PRIVATE",
+  "flows" : [ ],
+  "gravitee" : "2.0.0",
+  "flow_mode" : "DEFAULT",
+  "resources" : [ ],
+  "properties" : [ ],
+  "members" : [ {
+    "source" : "memory",
+    "sourceId" : "admin",
+    "roles" : [ "96a75e7c-bdb2-4e75-a75e-7cbdb2de7551" ]
+  } ],
+  "pages" : [ {
+    "id" : "8df8732f-3de6-49d1-b873-2f3de6d9d1b7",
+    "crossId" : "5e1dd861-573c-4aed-9dd8-61573c2aed57",
+    "name" : "Aside",
+    "type" : "SYSTEM_FOLDER",
+    "order" : 0,
+    "published" : true,
+    "visibility" : "PUBLIC",
+    "lastModificationDate" : 1694439453727,
+    "contentType" : "application/json",
+    "homepage" : false,
+    "parentPath" : "",
+    "excludedAccessControls" : false,
+    "accessControls" : [ ],
+    "api" : "6ef9735d-693b-49b3-b973-5d693b49b34f",
+    "attached_media" : [ ]
+  } ],
+  "plans" : [ {
+    "id" : "d3bc7de2-f047-42ad-bc7d-e2f04752ad3b",
+    "crossId" : "c316bd04-9635-43da-96bd-049635a3da75",
+    "name" : "Catalog UI",
+    "description" : "Catalog UI",
+    "validation" : "AUTO",
+    "security" : "KEY_LESS",
+    "type" : "API",
+    "status" : "PUBLISHED",
+    "api" : "6ef9735d-693b-49b3-b973-5d693b49b34f",
+    "order" : 0,
+    "characteristics" : [ ],
+    "created_at" : 1693989807559,
+    "updated_at" : 1694439453666,
+    "published_at" : 1693989807559,
+    "paths" : { },
+    "flows" : [ {
+      "id" : "22d9b9cd-a8d9-4174-99b9-cda8d9c17436",
+      "name" : "",
+      "path-operator" : {
+        "path" : "/",
+        "operator" : "STARTS_WITH"
+      },
+      "condition" : "",
+      "consumers" : [ ],
+      "methods" : [ ],
+      "pre" : [ ],
+      "post" : [ ],
+      "enabled" : true
+    } ],
+    "comment_required" : false
+  } ],
+  "metadata" : [ {
+    "key" : "email-support",
+    "name" : "email-support",
+    "format" : "MAIL",
+    "value" : "${(api.primaryOwner.email)!''}",
+    "defaultValue" : "support@change.me",
+    "apiId" : "6ef9735d-693b-49b3-b973-5d693b49b34f"
+  } ],
+  "id" : "6ef9735d-693b-49b3-b973-5d693b49b34f",
+  "path_mappings" : [ ],
+  "proxy" : {
+    "virtual_hosts" : [ {
+      "path" : "/ui/"
+    } ],
+    "strip_context_path" : false,
+    "preserve_host" : false,
+    "groups" : [ {
+      "name" : "default-group",
+      "endpoints" : [ {
+        "healthcheck" : {
+          "enabled" : false
+        },
+        "backup" : false,
+        "inherit" : true,
+        "name" : "default",
+        "weight" : 1,
+        "type" : "http",
+        "target" : "http://catalog_ui:3000/ui"
+      } ],
+      "load_balancing" : {
+        "type" : "ROUND_ROBIN"
+      },
+      "http" : {
+        "connectTimeout" : 5000,
+        "idleTimeout" : 60000,
+        "keepAlive" : true,
+        "readTimeout" : 10000,
+        "pipelining" : false,
+        "maxConcurrentConnections" : 100,
+        "useCompression" : true,
+        "followRedirects" : false
+      }
+    } ]
+  },
+  "response_templates" : { },
+  "primaryOwner" : {
+    "id" : "9d402ae9-60bc-4732-802a-e960bcf732a8",
+    "displayName" : "admin",
+    "type" : "USER"
+  }
+}

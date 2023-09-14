@@ -7,7 +7,7 @@ const client = new Client({
   node: process.env.ELASTICSEARCH_URL,
 });
 
-const Map = dynamic(() => import("./Map"), {
+const Map = dynamic(() => import("@/app/item/[id]/Map"), {
   loading: () => <p>Loading...</p>,
   ssr: false,
 });
