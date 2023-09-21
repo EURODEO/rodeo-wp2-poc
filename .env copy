@@ -1,7 +1,6 @@
 MONGODB_VERSION=4.4.18
 APIM_VERSION=3
 
-KEYCLOAK_VERSION=22.0.1
 KC_DB=postgres
 KC_DB_URL_HOST=postgres
 KC_DB_URL_DATABASE=keycloakdb
@@ -12,15 +11,15 @@ KEYCLOAK_ADMIN=admin
 KEYCLOAK_ADMIN_PASSWORD=admin
 
 POSTGRESQL_VERSION=15.4
-POSTGRESQL_DB=keycloakdb
+POSTGRESQL_DB=keycloak
 POSTGRESQL_USER=keycloak
 POSTGRESQL_PASS=password
 
 GRAVITEE_API_BASE_URL=http://localhost:8083
 
 ELASTICSEARCH_TOKEN=1234
-EWC_URL=http://localhost/api-manager
+EWC_URL=http://localhost/gateway/api-manager
 AWS_URL=http://example.org
-APIMANAGER_BASE_URL=http://localhost/api-manager
+APIMANAGER_BASE_URL=http://localhost/gateway/api-manager
 
 UI_BASE_PATH=/ui

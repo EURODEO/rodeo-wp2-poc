@@ -29,7 +29,7 @@ networks:
 
 services:
   mongodb:
-    image: mongo:${MONGODB_VERSION:-6.0.8}
+    image: mongo:${MONGODB_VERSION:-6.0}
     container_name: gio_apim_mongodb
     restart: always
     volumes:
@@ -72,8 +72,8 @@ services:
       - ./gravitee/apim-gateway/logs:/opt/graviteeio-gateway/logs
       - ./gravitee/apim-gateway/plugins:/opt/graviteeio-gateway/plugins-ext
     environment:
-      - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
-      - gravitee_ratelimit_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
+      - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=9000&connectTimeoutMS=9000&socketTimeoutMS=9000
+      - gravitee_ratelimit_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=9000&connectTimeoutMS=9000&socketTimeoutMS=9000
       - gravitee_reporters_elasticsearch_endpoints_0=http://elasticsearch-apim:9200
       - gravitee_plugins_path_0=/opt/graviteeio-gateway/plugins
       - gravitee_plugins_path_1=/opt/graviteeio-gateway/plugins-ext
@@ -97,7 +97,7 @@ services:
       - ./gravitee/apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext
       - ./gravitee-config/gravitee.yml:/opt/graviteeio-management-api/config/gravitee.yml
     environment:
-      - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
+      - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=9000&connectTimeoutMS=9000&socketTimeoutMS=9000
       - gravitee_analytics_elasticsearch_endpoints_0=http://elasticsearch-apim:9200
       - gravitee_plugins_path_0=/opt/graviteeio-management-api/plugins
       - gravitee_plugins_path_1=/opt/graviteeio-management-api/plugins-ext
@@ -139,34 +139,36 @@ services:
       - nginx
 
   keycloak:
-    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
-    command: start-dev
-    depends_on:
-      postgres:
-        condition: service_healthy
-    container_name: local_keycloak
+    image: jboss/keycloak:${KEYCLOAK_VERSION:-13.0.0}
     environment:
-      - KC_DB=${KC_DB}
-      - KC_DB_URL_HOST=${KC_DB_URL_HOST}
-      - KC_DB_URL_DATABASE=${KC_DB_URL_DATABASE}
-      - KC_DB_USERNAME=${KC_DB_USERNAME}
-      - KC_DB_PASSWORD=${KC_DB_PASSWORD}
-      - KC_DB_SCHEMA=${KC_DB_SCHEMA}
-      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_USER: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_IMPORT: /tmp/realm-gio.json
+      JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.upload_scripts=enabled"
+      DB_ADDR: postgres
+      DB_VENDOR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: ${KC_DB_PASSWORD}
+    restart: always
+    expose:
+      - 8080
     ports:
       - "8890:8080"
-    restart: unless-stopped
+    volumes:
+      - ./keycloak-realm-definitions/realm-gio.json:/tmp/realm-gio.json
     networks:
-      - storage
       - frontend
+      - storage
+      - nginx
 
   postgres:
     image: postgres:${POSTGRESQL_VERSION}
     volumes:
       - ./keycloak/postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_DB: keycloak
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
     healthcheck:
@@ -246,8 +248,10 @@ services:
   nginx:
     image: nginx:alpine
     container_name: nginx_container
+    hostname: auth.localhost
     depends_on:
       - management_ui
+      - keycloak
     ports:
       - 80:80
     networks:
