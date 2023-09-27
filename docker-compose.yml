@@ -115,7 +115,7 @@ services:
     depends_on:
       - management_api
     environment:
-      - MGMT_API_URL=${GRAVITEE_API_BASE_URL}/management/organizations/DEFAULT/environments/DEFAULT/
+      - MGMT_API_URL=${GRAVITEE_API_BASE_URL}/management_api/management/organizations/DEFAULT/environments/DEFAULT/
     volumes:
       - ./gravitee/apim-management-ui/logs:/var/log/nginx
     networks:
@@ -197,7 +197,7 @@ services:
   catalog:
     build:
       context: ./rodeo-poc-wis2-gdc
-    command: tail -F anything
+    command: tail -F /dev/null
     container_name: catalog
     volumes:
       - "./metadata-files:/metadata-files"
