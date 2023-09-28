@@ -1,1 +1,98 @@
-== Build instuction.
+== Usage instructions.
+
+=== Changing default config values:
+==== .env
+The repository has a template for environment variables and can be found from file `+.env copy+` at the root of the repo.
+
+* Change `+KC_DB_PASSWORD+` and `+POSTGRESQL_PASS+` to the same value as both connect to the same database.
+* Also change `+KEYCLOAK_ADMIN_PASSWORD+` as this will be your default admin password for Keycloak's Administration Console
+* We will change `+ELASTICSEARCH_TOKEN+` later after we have configured Gravitee API plans.
+[source,bash]
+----
+MONGODB_VERSION=4.4.18
+APIM_VERSION=3
+
+KC_DB=postgres
+KC_DB_URL_HOST=postgres
+KC_DB_URL_DATABASE=keycloakdb
+KC_DB_USERNAME=keycloak
+KC_DB_PASSWORD=<change_me>
+KC_DB_SCHEMA=public
+KEYCLOAK_ADMIN=admin
+KEYCLOAK_ADMIN_PASSWORD=<change_me>
+
+POSTGRESQL_VERSION=15.4
+POSTGRESQL_DB=keycloak
+POSTGRESQL_USER=keycloak
+POSTGRESQL_PASS=<change_me>
+
+GRAVITEE_API_BASE_URL=http://localhost:8083
+
+ELASTICSEARCH_TOKEN=1234
+EWC_URL=http://localhost/gateway/api-manager
+AWS_URL=http://example.org
+APIMANAGER_BASE_URL=http://localhost/gateway/api-manager
+
+UI_BASE_PATH=/ui
+----
+
+==== gravitee.yml
+* Change the default password for Gravitee admin by changing property `+password+` inside of file `+./gravitee-config/gravitee.yml+`
+** Default config uses bcrypt to hash passwords, so to generate new ones you can use command line tool htpasswd. Where new_password is your password:
+[Configure in-memory authentication]
+[source,bash]
+----
+htpasswd -bnBC 10 "" new_password | tr -d ':\n'
+----
+** See: https://docs.gravitee.io/apim/3.x/apim_installguide_authentication_inmemory.html
+
+
+=== Running
+Run `+docker compose up+` at the root of the project
+
+
+=== Import Gravitee API definitions
+* Login to the Gravitee admin console on `+localhost/management_ui+` using your admin credentials that we set previously.
+* Navigate to: APIs --> Add API --> Import an API
+* Import all the API definitions inside `+./gravitee-api-definitions+` directory
+
+==== Add JWT Token to Collection API
+* Go to APIs --> Collection --> Start creating a plan 
+* Create a new plan and set Authentication type to JWT
+* Follow this https://www.gravitee.io/blog/secure-apis-with-jwt-tokens[tutorial] to generate keys for JWT.
+
+==== Subscribe to Collection API
+* Go to Applications --> Add application
+* Set Client ID to value you remember as this will be needed when generating JWT token.
+* Subscribe to the plan you created on the previous step.
+* Generate new JWT Token Generate a new JWT Token using the keys and Client_id you created on previous steps.
+** For example using this https://jwt.io/[site]
+*** NOTE: ONLY USE THIS WEBSITE WITH TEST KEY PAIRS!
+* Set the payload to include client_id with the Client id you created previously
+
+==== Update .env
+* Copy the generated JWT Token to `+.env+` and update `+ELASTICSEARCH_TOKEN+` value
+* For example:
+[source,bash]
+----
+ELASTICSEARCH_TOKEN=12345678901011AbcdefgHijlkmv
+----
+* Restart the apimanager service
+[source,bash]
+----
+docker compose up apimanager
+----
+
+=== Add example data
+The project have some example metadata in `+./metadata-files+` directory. The directory is mounted to the metadata catalog container by default.
+
+* You can add some example metadata to the metadata catalog by attaching to the catalog container:
+[source,bash]
+----
+docker exec -it catalog /bin/bash
+----
+* Run the catalog to register new metadata
+[source,bash]
+----
+wis2-gdc register /metadata-files
+----

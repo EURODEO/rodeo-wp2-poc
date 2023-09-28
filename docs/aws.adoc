@@ -1,0 +1,30 @@
+== Deploy to AWS
+API Service/Manager can be deployed to Amazon Web Services using https://www.serverless.com/plugins/serverless-wsgi[Serverles wsgi]
+
+* Make sure you have installed and configured npm and https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html[AWS CLI] with your credentials.
+* Install serverless framework by running `+npm install -g serverless+` or following alternative instructions https://www.serverless.com/framework/docs/getting-started[here]
+* Navigate to `+./api-manager-demo+` directory
+* Run `+serverless deploy+`
+
+Serverless deploys the AWS lambda and AWS API Gateway to eu-north-1 region and provides a URL where the API Gateway is running.
+
+* Go to https://eu-north-1.console.aws.amazon.com/lambda 
+* Navigate to your function using AWS portal
+* Go to Configuration --> Environment variables
+
+** Change `+BASE_URL+` to your AWS API Gateway root path.
+
+** `+ELASTICSEARCH_TOKEN+` should be the JWT token that Gravitee Collections API uses
+
+** `+ELASTICSEARCH_URL+` should point to the URL where Gravitee gateway is running
+
+[.underline]#For example:#
+[source,bash]
+----
+BASE_URL=1234api.eu-north-1.amazonaws.com/dev
+ELASTICSEARCH_TOKEN=1234
+ELASTICSEARCH_URL=http://example.org:80/gateway
+
+----
+
+* Click Save

@@ -1,2 +1,4 @@
+= rodeo-wp2-poc Documentation
+
 == Introduction
 This is the documentation for Rodeo work package 2 prototype. Which outlines its purpose functionality, usage and build instructions.
